@@ -121,7 +121,7 @@
                             </div>
                             <div class="header__top__right__auth">
                                 <!--<a href="#"><i class="fa fa-user"></i> Login</a>-->
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-filter="*">
+                                <button type="button" class="btn btn-primary login-btn" data-toggle="modal" data-target="#exampleModal" data-filter="*">
                                     Login
                                 </button>
                             </div>
@@ -758,29 +758,18 @@
 
 
     <!-- Login Modal -->
-    <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">User Login</h5>
+                <h5 class="modal-title" id="modalTitle">Modal Template</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required>
-                        <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+                <!-- Templates go here -->
+                <h3>Test Content</h3>
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -790,7 +779,24 @@
     </div>
     <!-- Login Modal End -->
 
-    <!-- Js Plugins -->
+    <!-- Login Form Template -->
+    <template id="loginForm">
+        <form>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="text" class="form-control" id="inputUsername" aria-describedby="emailHelp" placeholder="Email Address" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="password" required>
+            </div>
+            <button type="button" class="btn btn-primary signin-btn">Sign In</button>
+        </form>
+    </template>
+    <!-- Login Form Template End -->
+
+
+    <!-- JS Plugins & Template Scripts -->
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.nice-select.min.js"></script>
@@ -799,6 +805,13 @@
     <script src="js/mixitup.min.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
+    <!-- AWS Cognito -->
+    <script src="./js-custom/amazon-cognito-auth.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script> 
+    <script src="./js-custom/amazon-cognito-identity.min.js"></script>
+    <script src="./js-custom/config.js"></script>
+    <!-- Custom Scripts-->
+    <script src="./js-custom/main-custom.js"></script>
 
 
 
