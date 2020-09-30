@@ -1,4 +1,3 @@
-
 var modal = document.getElementById("exampleModal");
 var modalBody = document.getElementsByClassName("modal-body")[0];
 var modalTitle = document.getElementById("modalTitle");
@@ -15,7 +14,14 @@ loginBtn.addEventListener('click', function() {
     var loginClone = loginFormTemplate.content.cloneNode(true);
     modalBody.append(loginClone);
 
+    addValidation();
+
     var loginFormSubmitBtn = document.getElementsByClassName("signin-btn")[0];
+    var loginFormRegisterLink = document.getElementsByClassName("register-btn")[0];
+
+    loginFormRegisterLink.addEventListener('click', function() {
+      registerLinkClick();
+    });
     
     // add click handler
     loginFormSubmitBtn.addEventListener('click', function() {
@@ -54,13 +60,74 @@ function loginSubmitBtnClick() {
     onSuccess: function (result) {
       var accessToken = result.getAccessToken().getJwtToken();
       console.log(accessToken);	
-      $("#exampleModal").modal("hide");
+      loginSuccess();
     },
     onFailure: function(err) {
         alert(err.message || JSON.stringify(err));
     },
   });
 } 
+
+// handles successful login
+function loginSuccess() {
+
+  // remove any existing modal body content
+  modalBody.textContent = '';
+
+  var headerSuccess = document.createElement("h4");
+  headerSuccess.innerText = "Login Successful!";
+
+  modalBody.append(headerSuccess);
+
+  setTimeout(function(){ $("#exampleModal").modal("hide"); }, 2000);
+}
+
+// handles register link click 
+function registerLinkClick() {
+  
+  // remove any existing modal body content
+  modalBody.textContent = '';
+
+  var registerFormTemplate = document.getElementById("registerForm");
+  var registerClone = registerFormTemplate.content.cloneNode(true);
+  modalBody.append(registerClone);
+
+  var registerFormSubmitBtn = document.getElementById("registerBtn");
+
+  registerFormSubmitBtn.addEventListener("click", function() {
+    registerFormSubmitBtnClick();
+  });
+
+  
+
+  modalTitle.innerText = "Register"; 
+}
+
+// handles register form submit btn click
+function registerFormSubmitBtnClick() {
+  
+}
+
+
+function addValidation() {
+  'use strict';
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  var forms = document.getElementsByClassName('needs-validation');
+  console.log(forms);
+  // Loop over them and prevent submission
+  var validation = Array.prototype.filter.call(forms, function(form) {
+    form.addEventListener('submit', function(event) {
+      if (form.checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    }, false);
+  });
+}
+
+
 
 
 
