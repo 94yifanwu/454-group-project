@@ -27,7 +27,7 @@ for(var i = 0; i <= 1; i++) {
     // add click handler
     loginFormSubmitBtn.addEventListener('click', function(event) {
       //event.preventDefault();
-      loginSubmitBtnClick();
+      loginFormSubmitBtnClick();
     });
 
     modalTitle.innerText = "Login"; 
@@ -35,40 +35,19 @@ for(var i = 0; i <= 1; i++) {
 }
 
 // handles login form submit btn click
-function loginSubmitBtnClick() {
+function loginFormSubmitBtnClick() {
 
-  // get the form data
-  var authenticationData = {
-    Username : document.getElementById("inputUsername").value,
-    Password : document.getElementById("inputPassword").value,
-  };
-  // directions on what user pool to use for our app
-  var poolData = {
-    UserPoolId : _config.cognito.userPoolId, // User Pool Id Here
-    ClientId : _config.cognito.clientId, // App Client Id Here
-  };
-  // get response data from AWS Cognito
-  var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
-  var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-  
-  var userData = {
-    Username : document.getElementById("inputUsername").value,
-    Pool : userPool,
-  };
-  // get data for the user trying to log in
-  var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+  // boolean check 
+  var formDataIsValid;
+  // form data
+  var loginUsername = document.getElementById("inputUsername").value;
+  var loginPassword = document.getElementById("inputPassword").value;
 
-  // try to login in the user, notify if there's an error
-  cognitoUser.authenticateUser(authenticationDetails, {
-    onSuccess: function (result) {
-      var accessToken = result.getAccessToken().getJwtToken();
-      console.log(accessToken);	
-      loginSuccess();
-    },
-    onFailure: function(err) {
-      loginFailure(err);
-    },
-  });
+  formDataIsValid = validateLoginFormData(loginUsername, loginPassword);
+
+  if(formDataIsValid) {
+    processLoginFormData(loginUsername, loginPassword);
+  }
 } 
 
 // handles successful login
@@ -77,8 +56,10 @@ function loginSuccess() {
   // remove any existing modal body content
   modalBody.textContent = '';
 
+  modalTitle.innerText = "Success!";
+
   var headerSuccess = document.createElement("h4");
-  headerSuccess.innerText = "Login Successful!";
+  headerSuccess.innerText = "Login successful, welcome back!";
 
   modalBody.append(headerSuccess);
 
@@ -138,7 +119,7 @@ function registerFormSubmitBtnClick() {
   formDataIsValid = validateRegisterFormData(fName, lName, userEmail, password, password2);
 
   if(formDataIsValid) {
-    processFormData(username, userEmail, password);
+    processRegisterFormData(username, userEmail, password);
   }
 }
 
@@ -197,6 +178,26 @@ function validateRegisterFormData(fName, lName, userEmail, password, password2) 
   return true;
 }
 
+// validates the login form to determine if it will be processed
+function validateLoginFormData(username, password) {
+  
+  // regex for username (email) validation
+  var emailRegExp = /^\S+@\S+[\.][0-9a-z]+$/;
+  // regex for password validation
+  var passwordRegExp = /.+/;
+
+  // validate username
+  if(username.match(emailRegExp) === null) {
+    return false;
+  }  
+  // validate password
+  if(password.match(passwordRegExp) === null) {
+    return false;
+  }
+  // if the username is formatted correctly
+  return true;
+}
+
 // handles validating the password confirmation input
 function confirmPassword(password, password2) {
   
@@ -212,8 +213,45 @@ function confirmPassword(password, password2) {
   }  
 }
 
+// handles login form submission
+function processLoginFormData(username, password) {
+  
+  // get the form data
+  var authenticationData = {
+    Username : username,
+    Password : password,
+  };
+  // directions on what user pool to use for our app
+  var poolData = {
+    UserPoolId : _config.cognito.userPoolId, // User Pool Id Here
+    ClientId : _config.cognito.clientId, // App Client Id Here
+  };
+  // get response data from AWS Cognito
+  var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
+  var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+  
+  var userData = {
+    Username : document.getElementById("inputUsername").value,
+    Pool : userPool,
+  };
+  // get data for the user trying to log in
+  var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+  // try to login in the user, notify if there's an error
+  cognitoUser.authenticateUser(authenticationDetails, {
+    onSuccess: function (result) {
+      var accessToken = result.getAccessToken().getJwtToken();
+      console.log(accessToken);	
+      loginSuccess();
+    },
+    onFailure: function(err) {
+      loginFailure(err);
+    },
+  });
+}
+
 // handles register form submission
-function processFormData(username, userEmail, password) {
+function processRegisterFormData(username, userEmail, password) {
 
   poolData = {
     UserPoolId : _config.cognito.userPoolId, // Your user pool id here
