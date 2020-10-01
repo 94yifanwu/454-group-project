@@ -54,8 +54,8 @@
             </div>
             <div class="header__top__right__auth">
                 <!--<a href="#"><i class="fa fa-user"></i> Login</a>-->
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Launch demo modal
+                <button type="button" class="btn btn-primary login-btn" data-toggle="modal" data-target="#exampleModal">
+                    Login
                 </button>
             </div>
         </div>
@@ -814,7 +814,7 @@
                 <div class="form-row">
                     <div class="col">
                         <label for="">First Name</label>
-                        <input type="text" id="fNameInput" class="form-control" pattern="[a-zA-Z]+" placeholder="First name" required>
+                        <input type="text" id="fNameInput" class="form-control" pattern="^[A-Za-z]+$" placeholder="First name" required>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
@@ -824,7 +824,7 @@
                     </div>
                     <div class="col">
                         <label for="">Last Name</label>
-                        <input type="text" id="lNameInput" class="form-control" pattern="[a-zA-Z]+" placeholder="Last name" required>
+                        <input type="text" id="lNameInput" class="form-control" pattern="^[A-Za-z]+$" placeholder="Last name" required>
                         <div class="valid-feedback">
                             Looks good!
                         </div>

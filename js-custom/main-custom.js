@@ -1,12 +1,12 @@
 var modal = document.getElementById("exampleModal");
 var modalBody = document.getElementsByClassName("modal-body")[0];
 var modalTitle = document.getElementById("modalTitle");
-var loginBtn = document.getElementsByClassName("login-btn")[0];
+var loginBtns = document.getElementsByClassName("login-btn");
 
 
-// handles navbar login btn click
-loginBtn.addEventListener('click', function() {
-  
+for(var i = 0; i <= 1; i++) {
+  loginBtns[i].addEventListener('click', function() {
+
     // remove any existing modal body content
     modalBody.textContent = '';
 
@@ -31,7 +31,8 @@ loginBtn.addEventListener('click', function() {
     });
 
     modalTitle.innerText = "Login"; 
-});
+  });
+}
 
 // handles login form submit btn click
 function loginSubmitBtnClick() {
@@ -89,9 +90,14 @@ function loginFailure(err) {
   var error = err.message || JSON.stringify(err);
   //alert(err.message || JSON.stringify(err));
 
-  $(".login-alert").text(error).show();
-
-  console.log(error);
+  // handle case: invalid email w/ password
+  if(error === "Unkown error") {
+    $(".login-alert").text("Incorrect username or password.").show();
+  }
+  // just print all the other errors
+  else {
+    $(".login-alert").text(error).show();
+  }
 }
 
 // handles register link click 
@@ -119,11 +125,95 @@ function registerLinkClick() {
 // handles register form submit btn click
 function registerFormSubmitBtnClick() {
   
+  // boolean check 
+  var formDataIsValid;
+  // form data
   var fName = document.getElementById("fNameInput").value;
   var lName = document.getElementById("lNameInput").value;
-  var username = (fName + " " + lName);
+  var username = fName + " " + lName;
   var userEmail = document.getElementById("emailRegisterInput").value;
-  var password = confirmPassword();
+  var password = document.getElementById("registerPasswordInput").value;
+  var password2 = document.getElementById("confirmPasswordInput").value;
+
+  formDataIsValid = validateRegisterFormData(fName, lName, userEmail, password, password2);
+
+  if(formDataIsValid) {
+    processFormData(username, userEmail, password);
+  }
+}
+
+function addValidation() {
+  'use strict';
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  var forms = document.getElementsByClassName('needs-validation');
+  //console.log(forms);
+
+  // Loop over them and prevent submission
+  var validation = Array.prototype.filter.call(forms, function(form) {
+    form.addEventListener('submit', function(event) {
+      // prevent any form submission at all - even if all data is validated
+      event.preventDefault();
+
+      /*if (form.checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+      }*/
+      form.classList.add('was-validated');
+    }, false);
+  });
+}
+
+// validates the register form to determine if it will be processed
+function validateRegisterFormData(fName, lName, userEmail, password, password2) {
+
+  // regex for name validation
+  var nameRegExp = /^[A-Za-z]+$/;
+  // regex for email validation
+  var emailRegExp = /^\S+@\S+[\.][0-9a-z]+$/;
+  //  regex for password validation
+  var passwordRegExp = /(?=.*\W)(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
+
+  // READ: match funct returns null if the reg exp doesnt find a string that fits the condition
+
+  // validate name
+  if(fName.match(nameRegExp) === null || lName.match(nameRegExp) === null) {
+    return false;
+  }
+  // validate email
+  if(userEmail.match(emailRegExp) === null) {
+    return false;
+  }
+  // validate password
+  if(password.match(passwordRegExp) === null) {
+    return false;
+  }
+  // confirm equal password input
+  if(confirmPassword(password, password2)) {
+    return false;
+  }
+
+  // if all the data checks out
+  return true;
+}
+
+// handles validating the password confirmation input
+function confirmPassword(password, password2) {
+  
+  if (password != password2) {
+    // the contents of the string in setCustomValidity don't really do anything, but a non-empty string basically means "wrong"
+    document.getElementById("confirmPasswordInput").setCustomValidity("Passwords did not match.");
+    return true;
+  } 
+  else {
+    // an empty string is saying that the value is correct.
+    document.getElementById("confirmPasswordInput").setCustomValidity("");
+    return false;	
+  }  
+}
+
+// handles
+function processFormData(username, userEmail, password) {
 
   poolData = {
     UserPoolId : _config.cognito.userPoolId, // Your user pool id here
@@ -160,48 +250,6 @@ function registerFormSubmitBtnClick() {
     console.log('user name is ' + cognitoUser.getUsername());
     //change elements of page
   });
-}
-
-
-function addValidation() {
-  'use strict';
-
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  var forms = document.getElementsByClassName('needs-validation');
-  //console.log(forms);
-
-  // Loop over them and prevent submission
-  var validation = Array.prototype.filter.call(forms, function(form) {
-    form.addEventListener('submit', function(event) {
-      // prevent any form submission at all - even if all data is validated
-      event.preventDefault();
-
-      /*if (form.checkValidity() === false) {
-        event.preventDefault();
-        event.stopPropagation();
-      }*/
-      form.classList.add('was-validated');
-    }, false);
-  });
-}
-
-// handles validating the password confirmation input
-function confirmPassword() {
-  
-  var password;
-
-  // compare the values in the two password inputs
-  if (document.getElementById("registerPasswordInput").value != document.getElementById("confirmPasswordInput").value) {
-    // the contents of the string don't really do anything, but a non-empty string basically means "wrong"
-    document.getElementById("confirmPasswordInput").setCustomValidity("Passwords did not match.");
-  } 
-  else {
-    // an empty string is basically saying that the value is correct.
-    document.getElementById("confirmPasswordInput").setCustomValidity("");
-    // if it's correct get the password value and return it to the caller
-    password = document.getElementById("registerPasswordInput").value;
-    return password;	
-  }  
 }
 
 
