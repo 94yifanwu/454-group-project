@@ -212,7 +212,7 @@ function confirmPassword(password, password2) {
   }  
 }
 
-// handles
+// handles register form submission
 function processFormData(username, userEmail, password) {
 
   poolData = {
@@ -242,16 +242,59 @@ function processFormData(username, userEmail, password) {
   attributeList.push(attributePersonalName);
 
   userPool.signUp(userEmail, password, attributeList, null, function(err, result){
+
     if (err) {
-      alert(err.message || JSON.stringify(err));
+      //alert(err.message || JSON.stringify(err));
+      registerFail(err);
       return;
     }
-    cognitoUser = result.user;
-    console.log('user name is ' + cognitoUser.getUsername());
-    //change elements of page
+    // else
+    registerSuccess(result);
   });
 }
 
+function registerSuccess(result) {
+  
+  var cognitoUser = result.user;
+
+  // remove previous content
+  modalBody.textContent = '';
+
+  // change modal title
+  modalTitle.innerText = "Almost there!";
+
+  // create response with error feedback
+  var responseSuccess = document.createElement("p");
+  var feedback = document.createElement("p");
+
+  responseSuccess.innerText = "Please check your email for an account verification link.";
+  feedback.innerText = "user name is " + cognitoUser.getUsername();
+
+  // append to the modal
+  modalBody.append(responseSuccess);
+  modalBody.append(feedback);
+}
+
+function registerFail(err) {
+
+  // remove previous content
+  modalBody.textContent = '';
+
+  // change modal title
+  modalTitle.innerText = "Uh-oh!";
+  var errorMessage = err.message || JSON.stringify(err);
+
+  // create response with error feedback
+  var responseFail = document.createElement("p");
+  var feedback = document.createElement("p");
+
+  responseFail.innerText = "There was a problem with your registration.";
+  feedback.innerText = errorMessage;
+
+  // append to the modal
+  modalBody.append(responseFail);
+  modalBody.append(feedback);
+}
 
 
 
