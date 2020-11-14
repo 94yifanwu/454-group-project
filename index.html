@@ -269,6 +269,7 @@
 
 
         $(function() {
+        /*
           $.ajax({
             header: "Access-Control-Allow-Origin",
             type: "GET",
@@ -281,20 +282,22 @@
             }
           });
         });
-/*
+        */
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json", "Access-Control-Allow-Origin");
             var requestOptions = {
                 method: 'GET',
-                mode: 'no-cors', 
                 headers: myHeaders,
+                redirect: 'follow'
             };
             fetch("https://xghmh4k433.execute-api.us-west-1.amazonaws.com/dev/ingredients?RecipeId=0", requestOptions)
             .then(response => response.text())
-            .then(result => alert(JSON.parse(result)))
+            .then(result => alert(JSON.parse(result).body))
+            .catch(error => console.log('error', error));
         });
         //yifan
-*/
+
+
               </script>
             </div>
             <div class="row">
