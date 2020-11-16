@@ -179,12 +179,25 @@
                             <i class="fa fa-bars"></i>
                             <span>All Ingredients</span>
                         </div>
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                        <script>
+                        //yifan - get all ingredients from recipes database
+                        $(function() {
+                            var settings = {
+                                "url": "https://xghmh4k433.execute-api.us-west-1.amazonaws.com/dev/ingredients?RecipeId=0",
+                                "method": "GET",
+                                "timeout": 0,
+                            };
+                            $.ajax(settings).done(function (response) {
+                                console.log(response);
+                            });
+                        });
+                        </script>
                         <ul>
                             <li><a href="#">Lorem Ipsum 1</a></li>
                             <li><a href="#">Lorem Ipsum 2</a></li>
                             <li><a href="#">Lorem Ipsum 2</a></li>
                             <li><a href="#">Lorem Ipsum 2</a></li>
-                            <li><a href="#">Lorem Ipsum 3</a></li>
                         </ul>
                     </div>
                 </div>
@@ -265,42 +278,6 @@
     <section class="featured spad">
         <div class="container">
             <div class="row">
-
-              <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-              <script>
-
-
-        $(function() {
-        /*
-          $.ajax({
-            header: "Access-Control-Allow-Origin",
-            type: "GET",
-            mode: 'no-cors', 
-            url:"https://xghmh4k433.execute-api.us-west-1.amazonaws.com/dev/ingredients?RecipeId=0",
-            contentType:"application/json",
-            dataType:"json",
-            success: function(data, status){
-              alert("Data: "+data + "\nStatus: "+status);
-            }
-          });
-        });
-        */
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json", "Access-Control-Allow-Origin");
-            var requestOptions = {
-                method: 'GET',
-                headers: myHeaders,
-                redirect: 'follow'
-            };
-            fetch("https://xghmh4k433.execute-api.us-west-1.amazonaws.com/dev/ingredients?RecipeId=0", requestOptions)
-            .then(response => response.text())
-            .then(result => alert(JSON.parse(result).body))
-            .catch(error => console.log('error', error));
-        });
-        //yifan
-
-
-              </script>
             </div>
             <div class="row">
                 <div class="col-lg-12">
