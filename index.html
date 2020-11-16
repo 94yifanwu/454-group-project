@@ -97,7 +97,7 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <ul>
-                                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
+                                <li><i class="fa fa-envelope"></i> hello@fullerton.com</li>
                                 <li>Place Holder Text</li>
                             </ul>
                         </div>
@@ -179,12 +179,30 @@
                             <i class="fa fa-bars"></i>
                             <span>All Ingredients</span>
                         </div>
-                        <ul>
-                            <li><a href="#">Lorem Ipsum 1</a></li>
-                            <li><a href="#">Lorem Ipsum 2</a></li>
-                            <li><a href="#">Lorem Ipsum 2</a></li>
-                            <li><a href="#">Lorem Ipsum 3</a></li>
+
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                        <script>
+                        //yifan - get all ingredients from recipes database
+                        $(function() {
+                            var settings = {
+                                "url": "https://xghmh4k433.execute-api.us-west-1.amazonaws.com/dev/ingredients?RecipeId=0",
+                                "method": "GET",
+                                "timeout": 0,
+                            };
+                            $.ajax(settings).done(function (response) {
+                                console.log(typeof(response[4]));
+                                console.log((response[3]));
+                                for (i in response){
+                                    console.log((response[i]));
+                                    $("#ingredientListId").append('<li><a href="#">'+response[i]+'</a></li>');
+                                }
+                            });
+                        });
+                        </script>
+
+                        <ul id="ingredientListId" style="overflow:scroll; height:300px;">
                         </ul>
+
                     </div>
                 </div>
                 <div class="col-lg-9">
@@ -270,11 +288,11 @@
                     </div>
                     <div class="featured__controls">
                         <ul>
-                            <li class="active" data-filter="*">tag 1</li>
-                            <li data-filter=".oranges">tag 2</li>
-                            <li data-filter=".fresh-meat">tag 3</li>
-                            <li data-filter=".vegetables">tag 4</li>
-                            <li data-filter=".fastfood">tag 5</li>
+                            <li class="active" data-filter="*">category 1</li>
+                            <li data-filter=".oranges">category 2</li>
+                            <li data-filter=".fresh-meat">category 3</li>
+                            <li data-filter=".vegetables">category 4</li>
+                            <li data-filter=".fastfood">category 5</li>
                         </ul>
                     </div>
                 </div>
