@@ -189,15 +189,17 @@
                                 "timeout": 0,
                             };
                             $.ajax(settings).done(function (response) {
-                                console.log(response);
+                                console.log(typeof(response[4]));
+                                console.log((response[3]));
+                                for (i in response){
+                                    console.log((response[i]));
+                                    $("#ingredientListId").append('<li><a href="#">'+response[i]+'</a></li>');
+                                }
                             });
                         });
+                        
                         </script>
-                        <ul>
-                            <li><a href="#">Lorem Ipsum 1</a></li>
-                            <li><a href="#">Lorem Ipsum 2</a></li>
-                            <li><a href="#">Lorem Ipsum 2</a></li>
-                            <li><a href="#">Lorem Ipsum 2</a></li>
+                        <ul id="ingredientListId" style="overflow:scroll; height:300px;">
                         </ul>
                     </div>
                 </div>
