@@ -629,14 +629,19 @@ ol {
 
 .hero__categories ul li {
 	list-style: none;
-}
-
-.hero__categories ul li a {
 	font-size: 16px;
 	color: #1c1c1c;
 	line-height: 39px;
 	display: block;
+	font-size: 1.25rem;
 }
+
+/*.hero__categories ul li a {
+	font-size: 16px;
+	color: #1c1c1c;
+	line-height: 39px;
+	display: block;
+}*/
 
 .hero__search {
 	overflow: hidden;
@@ -732,10 +737,27 @@ ol {
 }
 
 .hero__item {
-	height: 431px;
+	/*height: 431px;*/
 	display: flex;
 	align-items: center;
 	padding-left: 75px;
+	padding-right: 75px;
+	padding-top: 50px;
+	padding-bottom: 50px;
+	background-color: white;
+	margin-bottom: 48px;
+}
+
+#userIngredientsList > li, #resultsList > li {
+	font-size: 1.25rem;
+}
+
+#recipeInfoList {
+	padding-bottom: 24px;
+}
+
+#recipeInfoList > li {
+	list-style: none;
 }
 
 .hero__text span {

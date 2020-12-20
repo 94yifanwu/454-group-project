@@ -3,6 +3,116 @@ var modalBody = document.getElementsByClassName("modal-body")[0];
 var modalTitle = document.getElementById("modalTitle");
 var loginBtns = document.getElementsByClassName("login-btn");
 
+var recipes = [];
+
+
+// fires on page load
+$(document).ready(function() {
+
+  // populate the ingredients dropdown
+  fetch('https://xghmh4k433.execute-api.us-west-1.amazonaws.com/prod/ingredients/?id=0')
+    .then(response => response.text()
+    .then(data => getIngredients(JSON.parse(data))));
+
+  // add search recipes function to btn
+  $('#searchRecipesBtn').on('click', function(){
+    // gather all the ingredients
+
+    let searchParameters = $('#userIngredientsList').children();
+
+    // remove previous selections from the DOM
+    $('#userIngredientsList').empty();
+    $('#resultsList').empty();
+
+    // base url
+    let url = 'https://xghmh4k433.execute-api.us-west-1.amazonaws.com/prod/recipes/?'
+    // counter for unique param names
+    let count = 0;
+
+    // iterate through ingredients 
+    for(let item of searchParameters) {
+      // construct query param
+      url += "param" + count + "=" + item.textContent + "&";
+      count++;
+    }
+
+    getRecipes(url);
+  });
+});
+
+
+function getIngredients(data) {
+  
+  // append an li item for every ingredient in the list
+  for(item of data) {
+    $("#ingredientListId").append('<li class="item">'+ item + '</li>');
+  }
+
+  // add the event listener
+  $('.item').on('click', function(){
+    // get the value of the selected li
+    let item = $(this).text();
+    // add it to the list of ingredients
+    $('#userIngredientsList').append('<li>'+ item + '</li>');
+  });
+}
+
+function getRecipes(url) {
+
+    // search for recipes based on search parameters with given url
+    fetch(url)
+    .then(response => response.text()
+    .then(data => appendRecipes(JSON.parse(data))));
+}
+
+function appendRecipes(data) {
+  console.log(data);
+
+  // store data in our local 'DB' variable
+  recipes = data;
+
+
+  if(data == []) {
+    console.log('no results!');
+  }
+  else {
+
+  }
+
+  for(let item of data) {
+
+    $("#resultsList").append('<li class="result-item">'+ item.Name + '</li>');
+  }
+
+  $('.result-item').on('click', function(){
+  
+
+    $("#recipeInfoList").empty();
+    $("#recipeInstructionsList").empty();
+
+    let listRecipeName = $(this).text();
+    
+    for(recipe of recipes) {
+      if(recipe.Name === listRecipeName) {
+        console.log(recipe);
+        $("#recipeName").text(recipe.Name);
+        $("#recipeInfoList").append('<li>Servings:'+ recipe.Servings + '</li>');
+        $("#recipeInfoList").append('<li>Yield:'+ recipe.Yield + '</li>');
+        $("#recipeInfoList").append('<li>Prep:'+ recipe.Prep + '</li>');
+        $("#recipeInfoList").append('<li>Cook:'+ recipe.Cook + '</li>');
+        $("#recipeInfoList").append('<li>Total:'+ recipe.Total + '</li>');
+
+        console.log(recipe.Instructions);
+
+        for(instr of recipe.Instructions) {
+          $("#recipeInstructionsList").append('<li>' + instr + '</li>');
+        }  
+      }
+    }
+
+  });
+}
+
 
 for(var i = 0; i <= 1; i++) {
   loginBtns[i].addEventListener('click', function() {
@@ -123,28 +233,6 @@ function registerFormSubmitBtnClick() {
   }
 }
 
-function addValidation() {
-  'use strict';
-
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  var forms = document.getElementsByClassName('needs-validation');
-  //console.log(forms);
-
-  // Loop over them and prevent submission
-  var validation = Array.prototype.filter.call(forms, function(form) {
-    form.addEventListener('submit', function(event) {
-      // prevent any form submission at all - even if all data is validated
-      event.preventDefault();
-
-      /*if (form.checkValidity() === false) {
-        event.preventDefault();
-        event.stopPropagation();
-      }*/
-      form.classList.add('was-validated');
-    }, false);
-  });
-}
-
 // validates the register form to determine if it will be processed
 function validateRegisterFormData(fName, lName, userEmail, password, password2) {
 
@@ -201,6 +289,8 @@ function validateLoginFormData(username, password) {
 // handles validating the password confirmation input
 function confirmPassword(password, password2) {
   
+  console.log(password + " vs. " + password2);
+
   if (password != password2) {
     // the contents of the string in setCustomValidity don't really do anything, but a non-empty string basically means "wrong"
     document.getElementById("confirmPasswordInput").setCustomValidity("Passwords did not match.");
@@ -334,6 +424,28 @@ function registerFail(err) {
   modalBody.append(feedback);
 }
 
+// helper function for custom form validation
+function addValidation() {
+  'use strict';
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  var forms = document.getElementsByClassName('needs-validation');
+  //console.log(forms);
+
+  // Loop over them and prevent submission
+  var validation = Array.prototype.filter.call(forms, function(form) {
+    form.addEventListener('submit', function(event) {
+      // prevent any form submission at all - even if all data is validated
+      event.preventDefault();
+
+      /*if (form.checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+      }*/
+      form.classList.add('was-validated');
+    }, false);
+  });
+}
 
 
 
