@@ -72,45 +72,43 @@ function appendRecipes(data) {
   recipes = data;
 
 
-  if(data == []) {
+  if(data.length === 0) {
     console.log('no results!');
+    $("#resultsList").append('<h4>No Results</h4>');
   }
   else {
 
-  }
+    for(let item of data) {
 
-  for(let item of data) {
-
-    $("#resultsList").append('<li class="result-item">'+ item.Name + '</li>');
-  }
-
-  $('.result-item').on('click', function(){
-  
-
-    $("#recipeInfoList").empty();
-    $("#recipeInstructionsList").empty();
-
-    let listRecipeName = $(this).text();
-    
-    for(recipe of recipes) {
-      if(recipe.Name === listRecipeName) {
-        console.log(recipe);
-        $("#recipeName").text(recipe.Name);
-        $("#recipeInfoList").append('<li>Servings:'+ recipe.Servings + '</li>');
-        $("#recipeInfoList").append('<li>Yield:'+ recipe.Yield + '</li>');
-        $("#recipeInfoList").append('<li>Prep:'+ recipe.Prep + '</li>');
-        $("#recipeInfoList").append('<li>Cook:'+ recipe.Cook + '</li>');
-        $("#recipeInfoList").append('<li>Total:'+ recipe.Total + '</li>');
-
-        console.log(recipe.Instructions);
-
-        for(instr of recipe.Instructions) {
-          $("#recipeInstructionsList").append('<li>' + instr + '</li>');
-        }  
-      }
+      $("#resultsList").append('<li class="result-item">'+ item.Name + '</li>');
     }
-
-  });
+  
+    $('.result-item').on('click', function(){
+    
+      $("#recipeInfoList").empty();
+      $("#recipeInstructionsList").empty();
+  
+      let listRecipeName = $(this).text();
+      
+      for(recipe of recipes) {
+        if(recipe.Name === listRecipeName) {
+          //console.log(recipe);
+          $("#recipeName").text(recipe.Name);
+          $("#recipeInfoList").append('<li>Servings:'+ recipe.Servings + '</li>');
+          $("#recipeInfoList").append('<li>Yield:'+ recipe.Yield + '</li>');
+          $("#recipeInfoList").append('<li>Prep:'+ recipe.Prep + '</li>');
+          $("#recipeInfoList").append('<li>Cook:'+ recipe.Cook + '</li>');
+          $("#recipeInfoList").append('<li>Total:'+ recipe.Total + '</li>');
+  
+          //console.log(recipe.Instructions);
+  
+          for(instr of recipe.Instructions) {
+            $("#recipeInstructionsList").append('<li>' + instr + '</li>');
+          }  
+        }
+      }
+    });
+  }
 }
 
 
