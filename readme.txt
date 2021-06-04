@@ -1,1 +1,1 @@
-Run index.html in your browser.
+aws-severless-project
